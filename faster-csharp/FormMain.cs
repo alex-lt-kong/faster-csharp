@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Collections;
+using System.Diagnostics;
+using System.Buffers;
 
 namespace faster_csharp
 {
@@ -27,10 +20,12 @@ namespace faster_csharp
              * as if you had declared the type yourself, but the compiler determines the type. 
              * For this particular case, var watch is equal to System.Diagnostics.Stopwatch watch
              */
-            for (int i = 0; i < 1000; i++) {
+            for (int i = 0; i < 1000; i++)
+            {
                 long a = 0;
-                for (int j = 0; j< 50 * 1000; j++) { 
-                    a += j;           
+                for (int j = 0; j < 50 * 1000; j++)
+                {
+                    a += j;
                 }
             }
             watch.Stop();
@@ -47,7 +42,7 @@ namespace faster_csharp
         }
 
         private void buttonStaticVSDynamicArraies_Click(object sender, EventArgs e)
-        {            
+        {
             this.textBoxOutput.Text += $"===== Static vs Dynamic Arraies ====={Environment.NewLine}";
 
             const int NumberOfItems = 10 * 1000 * 1000;
@@ -83,6 +78,30 @@ namespace faster_csharp
             }
             this.textBoxOutput.Text += $"naiveArrayList: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
 
+        }
+
+        private void buttonArrayVSArrayPool_Click(object sender, EventArgs e)
+        {
+            this.textBoxOutput.Text += $"===== Array vs ArrayPool ====={Environment.NewLine}";
+            const int NumberOfItems = 10000;
+            Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
+            for (int i = 0; i < 1000; i++)
+            {
+                int[] array = new int[NumberOfItems];
+            }
+            watch.Stop();
+            this.textBoxOutput.Text += $"Array: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+            Application.DoEvents();
+
+            watch.Restart();
+            // ArrayPool does not appear to be supported in .NET Framework 4.8
+            for (int i = 0; i < 1000; i++)
+            {
+                var pool = ArrayPool<int>.Shared;
+                int[] array = pool.Rent(NumberOfItems);
+                pool.Return(array);
+            }
+            this.textBoxOutput.Text += $"ArrayPool: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
         }
     }
 }
