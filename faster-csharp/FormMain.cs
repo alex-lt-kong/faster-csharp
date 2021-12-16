@@ -4,6 +4,25 @@ using System.Buffers;
 
 namespace faster_csharp
 {
+    class MyClass
+    {
+        public int A { get; set; }
+        public int B { get; set; }
+        public int C { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Z { get; set; }
+    }
+    struct MyStruct
+    {
+        public int A { get; set; }
+        public int B { get; set; }
+        public int C { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Z { get; set; }
+    }
+
     public partial class FormMain : Form
     {
         public FormMain()
@@ -95,13 +114,53 @@ namespace faster_csharp
 
             watch.Restart();
             // ArrayPool does not appear to be supported in .NET Framework 4.8
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 100000; i++)
             {
                 var pool = ArrayPool<int>.Shared;
                 int[] array = pool.Rent(NumberOfItems);
+                // need to remember is that it has a default max array length, equal to 2^20 (1024*1024 = 1 048 576).
                 pool.Return(array);
+                // Returns an array to the pool that was previously obtained using the Rent(Int32) method on the same ArrayPool<T> instance.
+                /* Once a buffer has been returned to the pool, the caller gives up all
+                 * ownership of the buffer and must not use it. The reference returned from
+                 * a given call to the Rent method must only be returned using the Return method once.*/
             }
             this.textBoxOutput.Text += $"ArrayPool: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+        }
+
+        private void buttonStructVSClass_Click(object sender, EventArgs e)
+        {
+            this.textBoxOutput.Text += $"===== Struct vs Class ====={Environment.NewLine}";
+            const int NumberOfItems = 1000 * 1000;
+            Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
+            MyClass[] myClasses = new MyClass[NumberOfItems];
+            for (int i = 0; i < NumberOfItems; i++)
+            {
+                myClasses[i] = new MyClass();
+                myClasses[i].A = i+1;
+                myClasses[i].B = i+2;
+                myClasses[i].C = i+3;
+                myClasses[i].X = i+4;
+                myClasses[i].Y = i+5;
+                myClasses[i].Z = i+6;
+            }
+            watch.Stop();
+            this.textBoxOutput.Text += $"Class: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+            Application.DoEvents();
+
+            watch.Restart();
+            MyStruct[] myStructs = new MyStruct[NumberOfItems];
+            for (int i = 0; i < NumberOfItems; i++)
+            {
+                myStructs[i] = new MyStruct();
+                myStructs[i].A = i+1;
+                myStructs[i].B = i+2;
+                myStructs[i].C = i+3;
+                myStructs[i].X = i+4;
+                myStructs[i].Y = i+5;
+                myStructs[i].Z = i+6;
+            }
+            this.textBoxOutput.Text += $"Struct: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
         }
     }
 }

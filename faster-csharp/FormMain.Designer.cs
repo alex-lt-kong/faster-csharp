@@ -32,6 +32,7 @@
             this.textBoxOutput = new System.Windows.Forms.TextBox();
             this.buttonStaticVSDynamicArraies = new System.Windows.Forms.Button();
             this.buttonArrayVSArrayPool = new System.Windows.Forms.Button();
+            this.buttonStructVSClass = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonGCvsLoop
@@ -77,11 +78,22 @@
             this.buttonArrayVSArrayPool.UseVisualStyleBackColor = true;
             this.buttonArrayVSArrayPool.Click += new System.EventHandler(this.buttonArrayVSArrayPool_Click);
             // 
+            // buttonStructVSClass
+            // 
+            this.buttonStructVSClass.Location = new System.Drawing.Point(12, 150);
+            this.buttonStructVSClass.Name = "buttonStructVSClass";
+            this.buttonStructVSClass.Size = new System.Drawing.Size(188, 40);
+            this.buttonStructVSClass.TabIndex = 4;
+            this.buttonStructVSClass.Text = "Struct vs Class";
+            this.buttonStructVSClass.UseVisualStyleBackColor = true;
+            this.buttonStructVSClass.Click += new System.EventHandler(this.buttonStructVSClass_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(905, 454);
+            this.Controls.Add(this.buttonStructVSClass);
             this.Controls.Add(this.buttonArrayVSArrayPool);
             this.Controls.Add(this.buttonStaticVSDynamicArraies);
             this.Controls.Add(this.textBoxOutput);
@@ -100,5 +112,6 @@
         private TextBox textBoxOutput;
         private Button buttonStaticVSDynamicArraies;
         private Button buttonArrayVSArrayPool;
+        private Button buttonStructVSClass;
     }
 }
