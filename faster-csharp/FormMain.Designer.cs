@@ -33,6 +33,9 @@
             this.buttonStaticVSDynamicArraies = new System.Windows.Forms.Button();
             this.buttonArrayVSArrayPool = new System.Windows.Forms.Button();
             this.buttonStructVSClass = new System.Windows.Forms.Button();
+            this.buttonTryVSNoTry = new System.Windows.Forms.Button();
+            this.buttonFinalizerVSNoFinalizer = new System.Windows.Forms.Button();
+            this.buttonStringVSStringBuilder = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonGCvsLoop
@@ -55,7 +58,7 @@
             this.textBoxOutput.Multiline = true;
             this.textBoxOutput.Name = "textBoxOutput";
             this.textBoxOutput.ReadOnly = true;
-            this.textBoxOutput.Size = new System.Drawing.Size(687, 430);
+            this.textBoxOutput.Size = new System.Drawing.Size(387, 430);
             this.textBoxOutput.TabIndex = 1;
             // 
             // buttonStaticVSDynamicArraies
@@ -84,15 +87,48 @@
             this.buttonStructVSClass.Name = "buttonStructVSClass";
             this.buttonStructVSClass.Size = new System.Drawing.Size(188, 40);
             this.buttonStructVSClass.TabIndex = 4;
-            this.buttonStructVSClass.Text = "Struct vs Class";
+            this.buttonStructVSClass.Text = "Class vs Struct vs Dictionary";
             this.buttonStructVSClass.UseVisualStyleBackColor = true;
             this.buttonStructVSClass.Click += new System.EventHandler(this.buttonStructVSClass_Click);
+            // 
+            // buttonTryVSNoTry
+            // 
+            this.buttonTryVSNoTry.Location = new System.Drawing.Point(12, 196);
+            this.buttonTryVSNoTry.Name = "buttonTryVSNoTry";
+            this.buttonTryVSNoTry.Size = new System.Drawing.Size(188, 40);
+            this.buttonTryVSNoTry.TabIndex = 5;
+            this.buttonTryVSNoTry.Text = "Try vs No try";
+            this.buttonTryVSNoTry.UseVisualStyleBackColor = true;
+            this.buttonTryVSNoTry.Click += new System.EventHandler(this.buttonTryVSNoTry_Click);
+            // 
+            // buttonFinalizerVSNoFinalizer
+            // 
+            this.buttonFinalizerVSNoFinalizer.Location = new System.Drawing.Point(12, 242);
+            this.buttonFinalizerVSNoFinalizer.Name = "buttonFinalizerVSNoFinalizer";
+            this.buttonFinalizerVSNoFinalizer.Size = new System.Drawing.Size(188, 40);
+            this.buttonFinalizerVSNoFinalizer.TabIndex = 6;
+            this.buttonFinalizerVSNoFinalizer.Text = "Finalizer vs No finalizer";
+            this.buttonFinalizerVSNoFinalizer.UseVisualStyleBackColor = true;
+            this.buttonFinalizerVSNoFinalizer.Click += new System.EventHandler(this.buttonFinalizerVSNoFinalizer_Click);
+            // 
+            // buttonStringVSStringBuilder
+            // 
+            this.buttonStringVSStringBuilder.Location = new System.Drawing.Point(12, 288);
+            this.buttonStringVSStringBuilder.Name = "buttonStringVSStringBuilder";
+            this.buttonStringVSStringBuilder.Size = new System.Drawing.Size(188, 40);
+            this.buttonStringVSStringBuilder.TabIndex = 7;
+            this.buttonStringVSStringBuilder.Text = "String vs StringBuilder";
+            this.buttonStringVSStringBuilder.UseVisualStyleBackColor = true;
+            this.buttonStringVSStringBuilder.Click += new System.EventHandler(this.buttonStringVSStringBuilder_Click);
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(905, 454);
+            this.ClientSize = new System.Drawing.Size(605, 454);
+            this.Controls.Add(this.buttonStringVSStringBuilder);
+            this.Controls.Add(this.buttonFinalizerVSNoFinalizer);
+            this.Controls.Add(this.buttonTryVSNoTry);
             this.Controls.Add(this.buttonStructVSClass);
             this.Controls.Add(this.buttonArrayVSArrayPool);
             this.Controls.Add(this.buttonStaticVSDynamicArraies);
@@ -108,10 +144,12 @@
         #endregion
 
         private Button buttonGCvsLoop;
-        private TextBox textBox1;
         private TextBox textBoxOutput;
         private Button buttonStaticVSDynamicArraies;
         private Button buttonArrayVSArrayPool;
         private Button buttonStructVSClass;
+        private Button buttonTryVSNoTry;
+        private Button buttonFinalizerVSNoFinalizer;
+        private Button buttonStringVSStringBuilder;
     }
 }

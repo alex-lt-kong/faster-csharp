@@ -1,28 +1,11 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Buffers;
+using System.Collections.Generic;
+using System.Text;
 
 namespace faster_csharp
 {
-    class MyClass
-    {
-        public int A { get; set; }
-        public int B { get; set; }
-        public int C { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Z { get; set; }
-    }
-    struct MyStruct
-    {
-        public int A { get; set; }
-        public int B { get; set; }
-        public int C { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Z { get; set; }
-    }
-
     public partial class FormMain : Form
     {
         public FormMain()
@@ -119,7 +102,10 @@ namespace faster_csharp
                 var pool = ArrayPool<int>.Shared;
                 int[] array = pool.Rent(NumberOfItems);
                 // need to remember is that it has a default max array length, equal to 2^20 (1024*1024 = 1 048 576).
-                pool.Return(array);
+                try { }                
+                finally { // so we make sure an array is always returned
+                    pool.Return(array);
+                }
                 // Returns an array to the pool that was previously obtained using the Rent(Int32) method on the same ArrayPool<T> instance.
                 /* Once a buffer has been returned to the pool, the caller gives up all
                  * ownership of the buffer and must not use it. The reference returned from
@@ -130,19 +116,19 @@ namespace faster_csharp
 
         private void buttonStructVSClass_Click(object sender, EventArgs e)
         {
-            this.textBoxOutput.Text += $"===== Struct vs Class ====={Environment.NewLine}";
+            this.textBoxOutput.Text += $"===== Class vs Struct vs Dict ====={Environment.NewLine}";
             const int NumberOfItems = 1000 * 1000;
             Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
             MyClass[] myClasses = new MyClass[NumberOfItems];
             for (int i = 0; i < NumberOfItems; i++)
             {
                 myClasses[i] = new MyClass();
-                myClasses[i].A = i+1;
-                myClasses[i].B = i+2;
-                myClasses[i].C = i+3;
-                myClasses[i].X = i+4;
-                myClasses[i].Y = i+5;
-                myClasses[i].Z = i+6;
+                myClasses[i].A = i + 1;
+                myClasses[i].B = i + 2;
+                myClasses[i].C = i + 3;
+                myClasses[i].X = i + 4;
+                myClasses[i].Y = i + 5;
+                myClasses[i].Z = i + 6;
             }
             watch.Stop();
             this.textBoxOutput.Text += $"Class: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
@@ -153,14 +139,172 @@ namespace faster_csharp
             for (int i = 0; i < NumberOfItems; i++)
             {
                 myStructs[i] = new MyStruct();
-                myStructs[i].A = i+1;
-                myStructs[i].B = i+2;
-                myStructs[i].C = i+3;
-                myStructs[i].X = i+4;
-                myStructs[i].Y = i+5;
-                myStructs[i].Z = i+6;
+                myStructs[i].A = i + 1;
+                myStructs[i].B = i + 2;
+                myStructs[i].C = i + 3;
+                myStructs[i].X = i + 4;
+                myStructs[i].Y = i + 5;
+                myStructs[i].Z = i + 6;
             }
             this.textBoxOutput.Text += $"Struct: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+            Application.DoEvents();
+
+            watch.Restart();
+            Dictionary<string, int>[] myDicts = new Dictionary<string, int>[NumberOfItems];
+            for (int i = 0; i < NumberOfItems; i++)
+            {
+                myDicts[i] = new Dictionary<string, int>();
+                myDicts[i]["A"] = i + 1;
+                myDicts[i]["B"] = i + 2;
+                myDicts[i]["C"] = i + 3;
+                myDicts[i]["X"] = i + 4;
+                myDicts[i]["Y"] = i + 5;
+                myDicts[i]["Z"] = i + 6;
+            }
+            this.textBoxOutput.Text += $"Dictionary: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
         }
+
+        private void buttonTryVSNoTry_Click(object sender, EventArgs e)
+        {
+            this.textBoxOutput.Text += $"===== Try vs No try ====={Environment.NewLine}";
+
+            const int NumberOfItems = 10 * 1000 * 1000;
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+
+            watch.Start();
+            for (int i = 0; i < NumberOfItems; i++)
+            {
+                try
+                {
+                    int a = i;
+                    int b = a + 1;
+                }
+                catch { }
+                finally { }
+            }
+            watch.Stop();
+            this.textBoxOutput.Text += $"try{{}}ed: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+            Application.DoEvents();
+            System.GC.Collect();
+
+            watch.Restart();
+            for (int i = 0; i < NumberOfItems; i++)
+            {
+                int a = i;
+                int b = a + 1;
+            }
+            watch.Stop();
+            this.textBoxOutput.Text += $"not try{{}}ed: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+            this.textBoxOutput.Text += $"\"There IS harm in try{{}}ing\"{Environment.NewLine}";
+        }
+
+        private void buttonFinalizerVSNoFinalizer_Click(object sender, EventArgs e)
+        {
+            this.textBoxOutput.Text += $"===== Finalizer vs No Finalizer ====={Environment.NewLine}";
+            const int NumberOfItems = 1000 * 1000;
+            Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
+            MyClass[] myClasses = new MyClass[NumberOfItems];
+            for (int i = 0; i < NumberOfItems; i++)
+            {
+                myClasses[i] = new MyClass();
+                myClasses[i].A = i + 1;
+                myClasses[i].B = i + 2;
+                myClasses[i].C = i + 3;
+                myClasses[i].X = i + 4;
+                myClasses[i].Y = i + 5;
+                myClasses[i].Z = i + 6;
+            }
+            watch.Stop();
+            this.textBoxOutput.Text += $"Class: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+            Application.DoEvents();
+
+            watch.Restart();
+            MyClassWithFinalizer[] myClassWithFinalizers = new MyClassWithFinalizer[NumberOfItems];
+            for (int i = 0; i < NumberOfItems; i++)
+            {
+                myClassWithFinalizers[i] = new MyClassWithFinalizer();
+                myClassWithFinalizers[i].A = i + 1;
+                myClassWithFinalizers[i].B = i + 2;
+                myClassWithFinalizers[i].C = i + 3;
+                myClassWithFinalizers[i].X = i + 4;
+                myClassWithFinalizers[i].Y = i + 5;
+                myClassWithFinalizers[i].Z = i + 6;
+            }
+            watch.Stop();
+            this.textBoxOutput.Text += $"Class with a finalizer: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+        }
+
+        private void buttonStringVSStringBuilder_Click(object sender, EventArgs e)
+        {
+            /* Strings are immutable. So whenever you add two string objects, a new
+             * string object is created that holds the content of both strings. You
+             * can avoid the allocation of memory for this new string object by taking
+             * advantage of StringBuilder. */
+
+            /* StringBuilder will improve performance in cases where you make repeated
+             * modifications to a string or concatenate many strings together. However,
+             * you should keep in mind that regular concatenations are faster than StringBuilder
+             * for a small number of concatenations. */
+            this.textBoxOutput.Text += $"===== String vs StringBuilder ====={Environment.NewLine}";
+
+            const int NumberOfItems =  100 * 1000;
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+
+            watch.Start();
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < NumberOfItems; i++)
+            {
+                sb.Append(i.ToString());                
+            }
+            watch.Stop();
+            this.textBoxOutput.Text += $"StringBuilder: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+            Application.DoEvents();
+            System.GC.Collect();
+
+            watch.Restart();
+            String str = "";
+            for (int i = 0; i < NumberOfItems; i++)
+            {
+                str += i.ToString();
+            }
+            watch.Stop();
+            this.textBoxOutput.Text += $"String: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+        }
+    }
+
+    class MyClass
+    {
+        public int A { get; set; }
+        public int B { get; set; }
+        public int C { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Z { get; set; }
+    }
+
+    class MyClassWithFinalizer
+    {
+        public int A { get; set; }
+        public int B { get; set; }
+        public int C { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Z { get; set; }
+        ~MyClassWithFinalizer()
+        {
+            // an empty finalizer() can make GC a slower
+            /* an instance of a class that contains a finalizer is
+             * automatically promoted to a higher generation since
+             * it cannot be collected in generation 0. */
+        }
+    }
+    struct MyStruct
+    {
+        public int A { get; set; }
+        public int B { get; set; }
+        public int C { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public int Z { get; set; }
     }
 }
