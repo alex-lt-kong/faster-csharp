@@ -2,6 +2,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Buffers;
 using System.Collections.Generic;
+using System.Collections;
 using System.Text;
 
 namespace faster_csharp
@@ -49,8 +50,6 @@ namespace faster_csharp
 
             const int NumberOfItems = 10 * 1000 * 1000;
             var watch = System.Diagnostics.Stopwatch.StartNew();
-
-            watch.Start();
             int[] vanillaArray = new int[NumberOfItems];
             for (int i = 0; i < NumberOfItems; i++)
             {
@@ -171,7 +170,6 @@ namespace faster_csharp
             const int NumberOfItems = 10 * 1000 * 1000;
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
-            watch.Start();
             for (int i = 0; i < NumberOfItems; i++)
             {
                 try
@@ -248,7 +246,7 @@ namespace faster_csharp
             this.textBoxOutput.Text += $"===== String vs StringBuilder ====={Environment.NewLine}";
 
             const int NumberOfItems =  100 * 1000;
-            var watch = System.Diagnostics.Stopwatch.StartNew();
+            var watch = new Stopwatch();
 
             watch.Start();
             StringBuilder sb = new StringBuilder();
@@ -269,6 +267,92 @@ namespace faster_csharp
             }
             watch.Stop();
             this.textBoxOutput.Text += $"String: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+        }
+
+        private void buttonSOHvsLOH_Click(object sender, EventArgs e)
+        {
+            this.textBoxOutput.Text += $"===== Small Object Heap vs Large Object Heap ====={Environment.NewLine}";
+
+            const int NumberOfItems = 85 * 1000 / 4;
+            const int upper = 100 * 1000;
+
+            GC.Collect();
+
+            Stopwatch watch = new Stopwatch();
+            
+            watch.Start();            
+            for (int i = 0; i < upper; i++) {
+                int[] smallArray = new int[NumberOfItems - 8];
+                Debug.Assert(GC.GetGeneration(smallArray) == 0);
+            }
+            watch.Stop();
+            this.textBoxOutput.Text += $"Small Object Heap: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+            Application.DoEvents();
+            System.GC.Collect();
+
+            watch.Restart();            
+            for (int i = 0; i < upper; i++) {
+                int[] bigArray = new int[NumberOfItems];
+                Debug.Assert(GC.GetGeneration(bigArray) == 2);
+            }
+            watch.Stop();
+            this.textBoxOutput.Text += $"Big Object Heap: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+        }
+
+        private void buttonHashtableVSDictionary_Click(object sender, EventArgs e)
+        {  
+            this.textBoxOutput.Text += $"===== Hashtable vs Dictionary ====={Environment.NewLine}";
+            const int NumberOfItems = 10 * 1000;
+            Stopwatch watch = Stopwatch.StartNew();
+
+            Hashtable[] myHashtable = new Hashtable[NumberOfItems];
+            for (int i = 0; i < NumberOfItems; i++)
+            {
+                myHashtable[i] = new Hashtable();
+                myHashtable[i]["A"] = i + 1;
+                myHashtable[i]["B"] = i + 2;
+                myHashtable[i]["C"] = i + 3;
+                myHashtable[i][1] = i + 4;
+                myHashtable[i][2] = i + 5;
+                myHashtable[i][3] = i + 6;
+            }
+            watch.Stop();
+            this.textBoxOutput.Text += $"Same-type hashtable: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+            Application.DoEvents();
+
+            GC.Collect();
+
+            watch.Restart();
+            myHashtable = new Hashtable[NumberOfItems];
+            for (int i = 0; i < NumberOfItems; i++)
+            {
+                myHashtable[i] = new Hashtable();
+                myHashtable[i]["A"] = new int[i + 1];
+                myHashtable[i]["B"] = new string[i + 2];
+                myHashtable[i]["C"] = new object();
+                myHashtable[i][1] = i + 4;
+                myHashtable[i][2] = i + 5;
+                myHashtable[i][3] = i + 6;
+            }
+            watch.Stop();
+            this.textBoxOutput.Text += $"Different-type hashtable: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+            Application.DoEvents();
+
+            GC.Collect();
+
+            watch.Restart();
+            Dictionary<string, int>[] myDicts = new Dictionary<string, int>[NumberOfItems];
+            for (int i = 0; i < NumberOfItems; i++)
+            {
+                myDicts[i] = new Dictionary<string, int>();
+                myDicts[i]["A"] = i + 1;
+                myDicts[i]["B"] = i + 2;
+                myDicts[i]["C"] = i + 3;
+                myDicts[i]["1"] = i + 4;
+                myDicts[i]["2"] = i + 5;
+                myDicts[i]["3"] = i + 6;
+            }
+            this.textBoxOutput.Text += $"Dictionary: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
         }
     }
 

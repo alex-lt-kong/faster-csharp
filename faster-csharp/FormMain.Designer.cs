@@ -36,6 +36,8 @@
             this.buttonTryVSNoTry = new System.Windows.Forms.Button();
             this.buttonFinalizerVSNoFinalizer = new System.Windows.Forms.Button();
             this.buttonStringVSStringBuilder = new System.Windows.Forms.Button();
+            this.buttonSOHvsLOH = new System.Windows.Forms.Button();
+            this.buttonHashtableVSDictionary = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonGCvsLoop
@@ -121,11 +123,33 @@
             this.buttonStringVSStringBuilder.UseVisualStyleBackColor = true;
             this.buttonStringVSStringBuilder.Click += new System.EventHandler(this.buttonStringVSStringBuilder_Click);
             // 
+            // buttonSOHvsLOH
+            // 
+            this.buttonSOHvsLOH.Location = new System.Drawing.Point(12, 334);
+            this.buttonSOHvsLOH.Name = "buttonSOHvsLOH";
+            this.buttonSOHvsLOH.Size = new System.Drawing.Size(188, 40);
+            this.buttonSOHvsLOH.TabIndex = 8;
+            this.buttonSOHvsLOH.Text = "SOH vs LOH";
+            this.buttonSOHvsLOH.UseVisualStyleBackColor = true;
+            this.buttonSOHvsLOH.Click += new System.EventHandler(this.buttonSOHvsLOH_Click);
+            // 
+            // buttonHashtableVSDictionary
+            // 
+            this.buttonHashtableVSDictionary.Location = new System.Drawing.Point(12, 380);
+            this.buttonHashtableVSDictionary.Name = "buttonHashtableVSDictionary";
+            this.buttonHashtableVSDictionary.Size = new System.Drawing.Size(188, 40);
+            this.buttonHashtableVSDictionary.TabIndex = 9;
+            this.buttonHashtableVSDictionary.Text = "Hashtable vs Dictionary";
+            this.buttonHashtableVSDictionary.UseVisualStyleBackColor = true;
+            this.buttonHashtableVSDictionary.Click += new System.EventHandler(this.buttonHashtableVSDictionary_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(605, 454);
+            this.Controls.Add(this.buttonHashtableVSDictionary);
+            this.Controls.Add(this.buttonSOHvsLOH);
             this.Controls.Add(this.buttonStringVSStringBuilder);
             this.Controls.Add(this.buttonFinalizerVSNoFinalizer);
             this.Controls.Add(this.buttonTryVSNoTry);
@@ -151,5 +175,7 @@
         private Button buttonTryVSNoTry;
         private Button buttonFinalizerVSNoFinalizer;
         private Button buttonStringVSStringBuilder;
+        private Button buttonSOHvsLOH;
+        private Button buttonHashtableVSDictionary;
     }
 }
