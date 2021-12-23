@@ -354,6 +354,52 @@ namespace faster_csharp
             }
             this.textBoxOutput.Text += $"Dictionary: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
         }
+
+        private void buttonDivideVSMultiplyByReciprocal_Click(object sender, EventArgs e)
+        {
+            this.textBoxOutput.Text += $"===== Division vs Reciprocal Multiplication ====={Environment.NewLine}";
+            int upper = 100 * 1000 * 1000;
+            double pi = 3.0;
+            double piReciprocal = 1 / pi;
+
+            Stopwatch watch = Stopwatch.StartNew();
+            for (int i = 0; i < upper; i++)
+            {
+                double a = i / pi;
+            }
+            watch.Stop();
+            this.textBoxOutput.Text += $"Naive division: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+
+            Application.DoEvents();
+            GC.Collect();
+
+            watch.Restart();
+            for (int i = 0; i < upper; i++)
+            {
+                double a = i * piReciprocal;
+            }
+            this.textBoxOutput.Text += $"Naive reciprocal multiplication: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+
+            Application.DoEvents();
+            GC.Collect();
+
+            watch.Restart();
+            for (int i = 0; i < upper; i++)
+            {
+                if (i % 13 == 0) { continue; } // So that the results won't be easily vectorized.
+                double a = i / pi;
+            }
+            watch.Stop();
+            this.textBoxOutput.Text += $"Obfuscated division: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+
+            watch.Restart();
+            for (int i = 0; i < upper; i++)
+            {
+                if (i % 13 == 0) { continue; }
+                double a = i * piReciprocal;
+            }
+            this.textBoxOutput.Text += $"Obfuscated reciprocal multiplication: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+        }
     }
 
     class MyClass

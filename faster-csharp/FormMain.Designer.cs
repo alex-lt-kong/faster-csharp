@@ -38,6 +38,7 @@
             this.buttonStringVSStringBuilder = new System.Windows.Forms.Button();
             this.buttonSOHvsLOH = new System.Windows.Forms.Button();
             this.buttonHashtableVSDictionary = new System.Windows.Forms.Button();
+            this.buttonDivideVSMultiplyByReciprocal = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonGCvsLoop
@@ -60,7 +61,8 @@
             this.textBoxOutput.Multiline = true;
             this.textBoxOutput.Name = "textBoxOutput";
             this.textBoxOutput.ReadOnly = true;
-            this.textBoxOutput.Size = new System.Drawing.Size(387, 430);
+            this.textBoxOutput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBoxOutput.Size = new System.Drawing.Size(387, 460);
             this.textBoxOutput.TabIndex = 1;
             // 
             // buttonStaticVSDynamicArraies
@@ -143,11 +145,22 @@
             this.buttonHashtableVSDictionary.UseVisualStyleBackColor = true;
             this.buttonHashtableVSDictionary.Click += new System.EventHandler(this.buttonHashtableVSDictionary_Click);
             // 
+            // buttonDivideVSMultiplyByReciprocal
+            // 
+            this.buttonDivideVSMultiplyByReciprocal.Location = new System.Drawing.Point(12, 426);
+            this.buttonDivideVSMultiplyByReciprocal.Name = "buttonDivideVSMultiplyByReciprocal";
+            this.buttonDivideVSMultiplyByReciprocal.Size = new System.Drawing.Size(188, 40);
+            this.buttonDivideVSMultiplyByReciprocal.TabIndex = 10;
+            this.buttonDivideVSMultiplyByReciprocal.Text = "Divide vs Multiply by Reciprocal ";
+            this.buttonDivideVSMultiplyByReciprocal.UseVisualStyleBackColor = true;
+            this.buttonDivideVSMultiplyByReciprocal.Click += new System.EventHandler(this.buttonDivideVSMultiplyByReciprocal_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(605, 454);
+            this.ClientSize = new System.Drawing.Size(605, 484);
+            this.Controls.Add(this.buttonDivideVSMultiplyByReciprocal);
             this.Controls.Add(this.buttonHashtableVSDictionary);
             this.Controls.Add(this.buttonSOHvsLOH);
             this.Controls.Add(this.buttonStringVSStringBuilder);
@@ -177,5 +190,6 @@
         private Button buttonStringVSStringBuilder;
         private Button buttonSOHvsLOH;
         private Button buttonHashtableVSDictionary;
+        private Button buttonDivideVSMultiplyByReciprocal;
     }
 }

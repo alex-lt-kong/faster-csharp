@@ -52,3 +52,9 @@ Big Object Heap: 3574 ms
 Same-type hashtable: 11 ms\
 Different-type hashtable: 1004 ms\
 Dictionary: 5 ms
+
+===== Division vs Reciprocal Multiplication =====\
+Naive division: 201 ms\
+Naive reciprocal multiplication: 233 ms\
+Obfuscated division: 653 ms\
+Obfuscated reciprocal multiplication: 663 ms
