@@ -39,6 +39,7 @@
             this.buttonSOHvsLOH = new System.Windows.Forms.Button();
             this.buttonHashtableVSDictionary = new System.Windows.Forms.Button();
             this.buttonDivideVSMultiplyByReciprocal = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonGCvsLoop
@@ -62,7 +63,7 @@
             this.textBoxOutput.Name = "textBoxOutput";
             this.textBoxOutput.ReadOnly = true;
             this.textBoxOutput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxOutput.Size = new System.Drawing.Size(387, 460);
+            this.textBoxOutput.Size = new System.Drawing.Size(387, 514);
             this.textBoxOutput.TabIndex = 1;
             // 
             // buttonStaticVSDynamicArraies
@@ -155,11 +156,22 @@
             this.buttonDivideVSMultiplyByReciprocal.UseVisualStyleBackColor = true;
             this.buttonDivideVSMultiplyByReciprocal.Click += new System.EventHandler(this.buttonDivideVSMultiplyByReciprocal_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(12, 472);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(188, 40);
+            this.button1.TabIndex = 11;
+            this.button1.Text = "gRPC vs RESTful API";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(605, 484);
+            this.ClientSize = new System.Drawing.Size(605, 538);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonDivideVSMultiplyByReciprocal);
             this.Controls.Add(this.buttonHashtableVSDictionary);
             this.Controls.Add(this.buttonSOHvsLOH);
@@ -191,5 +203,6 @@
         private Button buttonSOHvsLOH;
         private Button buttonHashtableVSDictionary;
         private Button buttonDivideVSMultiplyByReciprocal;
+        private Button button1;
     }
 }

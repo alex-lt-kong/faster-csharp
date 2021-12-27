@@ -4,6 +4,13 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Collections;
 using System.Text;
+using Mytest;
+using Grpc.Core;
+using System.Net;
+using System;
+using System.Net.Http.Headers;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace faster_csharp
 {
@@ -399,6 +406,51 @@ namespace faster_csharp
                 double a = i * piReciprocal;
             }
             this.textBoxOutput.Text += $"Obfuscated reciprocal multiplication: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {     
+            int upper = 10;
+            Random rnd = new Random(2021);
+            this.textBoxOutput.Text += $"===== Division vs Reciprocal Multiplication ====={Environment.NewLine}";
+
+            Stopwatch watch = Stopwatch.StartNew();
+            Channel channel = new Channel("127.0.0.1:50051", ChannelCredentials.Insecure);
+            var client = new Calculator.CalculatorClient(channel);
+            for (int i = 0; i < upper; i++)
+            {
+                double num1 = rnd.Next(1000);
+                double num2 = rnd.Next(1000);
+                CalculatorRequest gRPCrequest = new CalculatorRequest { Num1 = num1, Num2 = num2 };
+                var replyAdd = client.add(gRPCrequest);
+                var replyMinus = client.minus(gRPCrequest);
+                Console.WriteLine($"num1: {num1}, num2: {num2}, sum: {replyAdd.Result}, diff: {replyMinus.Result}");
+            }
+            this.textBoxOutput.Text += $"gRPC: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
+            Application.DoEvents();
+            GC.Collect();
+            
+            watch.Restart();
+            HttpClient httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            for (int i = 0; i < upper; i++)
+            {
+                double num1 = rnd.Next(1000);
+                double num2 = rnd.Next(1000);
+
+                string url = $"http://localhost:50052/add/?num1={num1}&num2={num2}";
+                HttpResponseMessage response = httpClient.GetAsync(url).Result;
+                var webRequest = new HttpRequestMessage(HttpMethod.Get, url);
+                JObject jsonSum = (JObject)JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result);
+
+                url = $"http://localhost:50052/minus/?num1={num1}&num2={num2}";
+                response = httpClient.GetAsync(url).Result;
+                webRequest = new HttpRequestMessage(HttpMethod.Get, url);
+                JObject jsonDiff = (JObject)JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result);
+                Console.WriteLine($"num1: {num1}, num2: {num2}, sum: {jsonSum["result"]}, diff: {jsonDiff["result"]}");
+
+            }
+            this.textBoxOutput.Text += $"RESTful API: {watch.ElapsedMilliseconds} ms{Environment.NewLine}";
         }
     }
 
