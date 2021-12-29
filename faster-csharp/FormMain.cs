@@ -412,7 +412,7 @@ namespace faster_csharp
         {     
             int upper = 10;
             Random rnd = new Random(2021);
-            this.textBoxOutput.Text += $"===== Division vs Reciprocal Multiplication ====={Environment.NewLine}";
+            this.textBoxOutput.Text += $"===== gRPC vs RESTful API ====={Environment.NewLine}";
 
             Stopwatch watch = Stopwatch.StartNew();
             Channel channel = new Channel("127.0.0.1:50051", ChannelCredentials.Insecure);

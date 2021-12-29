@@ -59,6 +59,6 @@ Naive reciprocal multiplication: 233 ms\
 Obfuscated division: 653 ms\
 Obfuscated reciprocal multiplication: 663 ms
 
-===== Division vs Reciprocal Multiplication =====\
-gRPC: 174 ms\
-RESTful API: 2540 ms\
+===== gRPC vs RESTful API =====\
+gRPC: 11 ms\
+RESTful API: 2082 ms
